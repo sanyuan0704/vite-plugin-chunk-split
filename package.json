@@ -14,7 +14,7 @@
     "code-splitting"
   ],
   "files": ["dist"],
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^27.0.1",
     "@types/node": "^17.0.18",

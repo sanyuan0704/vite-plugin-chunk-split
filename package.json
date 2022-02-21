@@ -1,0 +1,33 @@
+{
+  "name": "vite-plugin-chunk-split",
+  "version": "0.0.1",
+  "description": "A vite plugin for better chunk split",
+  "author": "sanyuan0704",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc -w",
+    "test": "jest"
+  },
+  "keywords": [
+    "vite",
+    "code-splitting"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "@types/node": "^17.0.18",
+    "@types/resolve": "^1.20.1",
+    "esbuild-jest": "^0.5.0",
+    "jest": "^27.5.1",
+    "rollup": "^2.62.0",
+    "typescript": "^4.5.2",
+    "vite": "^2.7.10"
+  },
+  "peerDependencies": {
+    "vite": ">=2.0.0"
+  },
+  "dependencies": {
+    "resolve": "^1.22.0"
+  }
+}

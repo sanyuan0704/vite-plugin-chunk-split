@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "module": "CommonJS",
+    "lib": ["ES2016"],
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "target": "es6",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "sourceMap": true
+  },
+  "include": ["src"],
+  "exclude": [
+    "node_modules"
+  ]
+}

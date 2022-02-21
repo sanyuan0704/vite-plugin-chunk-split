@@ -13,6 +13,7 @@
     "vite",
     "code-splitting"
   ],
+  "files": ["dist"],
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^27.0.1",

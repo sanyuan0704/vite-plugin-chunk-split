@@ -104,3 +104,5 @@ dist
 .tern-port
 
 jest/cache
+
+pnpm-lock.yaml

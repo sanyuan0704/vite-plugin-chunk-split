@@ -100,7 +100,14 @@ export function chunkSplitPlugin(splitOptions: ChunkSplit = {
   let manualChunks: ManualChunksOption; 
 
   if (strategy === 'all-in-one') {
-    manualChunks = (): string => 'index';
+    manualChunks = wrapCustomSplitConfig(
+      (id) => {
+        if (!isCSSIdentifier(id)) {
+          return 'index';
+        }
+      },
+      customSplitting
+    );
   }
 
   if (strategy === 'default') {

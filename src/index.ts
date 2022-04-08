@@ -1,16 +1,28 @@
 import { ManualChunksOption } from 'rollup';
-import { Plugin } from 'vite';
+import { Plugin, resolvePackageEntry, resolvePackageData } from 'vite';
 import assert from 'assert';
 import path from 'path';
 import { ChunkSplit, CustomSplitting } from './types';
 import { staticImportedScan } from './staticImportScan';
 import { isCSSIdentifier } from './helper';
-import resolve from 'resolve';
 
 const SPLIT_DEFAULT_MODULES: CustomSplitting = {
   react_vendor: ['react', 'react-dom'],
   lodash: ['lodash', 'lodash-es']
 };
+
+const resolveEntry = (name: string): string => resolvePackageEntry(
+  name,
+  resolvePackageData(name, process.cwd(), true)!,
+  true,
+  {
+    isBuild: true,
+    isProduction: process.env.NODE_ENV === 'production',
+    isRequire: false,
+    root: process.cwd(),
+    preserveSymlinks: false,
+  },
+)!;
 
 const cache = new Map<string, boolean>();
 
@@ -26,9 +38,9 @@ const wrapCustomSplitConfig = (
     const packageInfo = customOptions[group];
     depsInGroup[group] = packageInfo
       .filter((item): boolean => typeof item === 'string')
-      .map((item): string => {
+      .map((item) => {
         try {
-          return resolve.sync(item as string, { preserveSymlinks: false, basedir: process.cwd() });
+          return resolveEntry(item as string);
         } catch (err) {
           return '';
         }

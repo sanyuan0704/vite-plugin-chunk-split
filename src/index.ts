@@ -79,11 +79,8 @@ const wrapCustomSplitConfig = (
     for (const group of groups) {
       const deps = depsInGroup[group];
       const packageInfo = customOptions[group];
-      if (
-        moduleId.includes('node_modules') &&
-        !isCSSIdentifier(moduleId)
-      ) {
-        if (deps.length && isDepInclude(moduleId, deps, [])) {
+      if (!isCSSIdentifier(moduleId)) {
+        if (moduleId.includes('node_modules') && deps.length && isDepInclude(moduleId, deps, [])) {
           return group;
         }
         for (const rule of packageInfo) {

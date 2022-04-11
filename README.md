@@ -36,8 +36,6 @@ type Strategy =
   | 'default'
   // all files will be together
   | 'all-in-one'
-  // use vite default strategy
-  | 'single-vendor'
   // unbundle for your source files，vite will generate one chunk for every file
   | 'unbundle';
 
@@ -61,8 +59,8 @@ import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
       customSplitting: {
         // `react` and `react-dom` will be bundled together in the `react-vendor` chunk (with their dependencies, such as object-assign)
         'react-vendor': ['react', 'react-dom'],
-        // Any file that includes `acro` will be bundled in the `arco` chunk 
-        'arco': [/arco/]
+        // Any file that includes `utils` in src dir will be bundled in the `utils` chunk 
+        'arco': [/src\/utils/]
       }
     })
   ]

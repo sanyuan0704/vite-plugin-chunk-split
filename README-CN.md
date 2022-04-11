@@ -37,8 +37,6 @@ type Strategy =
   | 'default'
   // 所有文件打包到一起
   | 'all-in-one'
-  // 使用 Vite 默认的拆包策略
-  | 'single-vendor'
   // 实现不打包的效果，一个文件一个 chunk
   | 'unbundle';
 
@@ -58,12 +56,12 @@ import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
   plugins: [
     // ...
     chunkSplitPlugin({
-      strategy: 'single-vendor',
+      strategy: 'default',
       customSplitting: {
         // `react` and `react-dom` 会被打包到一个名为`render-vendor`的 chunk 里面(包括它们的一些依赖，如 object-assign)
         'react-vendor': ['react', 'react-dom'],
-        // 所有文件名中包含`arco`的文件都会被打包进 `acro` 这个 chunk 中
-        'arco': [/arco/]
+        // 源码中 utils 目录的代码都会打包进 `utils` 这个 chunk 中
+        'utils': [/src\/utils/]
       }
     })
   ]

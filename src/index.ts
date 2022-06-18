@@ -6,10 +6,7 @@ import { ChunkSplit, CustomSplitting } from "./types";
 import { staticImportedScan } from "./staticImportScan";
 import { isCSSIdentifier } from "./helper";
 
-const SPLIT_DEFAULT_MODULES: CustomSplitting = {
-  react_vendor: ["react", "react-dom"],
-  lodash: ["lodash", "lodash-es"],
-};
+const SPLIT_DEFAULT_MODULES: CustomSplitting = {};
 
 const resolveEntry = (name: string): string =>
   resolvePackageEntry(

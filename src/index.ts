@@ -127,8 +127,6 @@ export function chunkSplitPlugin(
         if (id.includes("node_modules") && !isCSSIdentifier(id)) {
           if (staticImportedScan(id, getModuleInfo, new Map(), [])) {
             return "vendor";
-          } else {
-            return "async-vendor";
           }
         }
       },

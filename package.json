@@ -4,6 +4,9 @@
   "description": "A vite plugin for better chunk split",
   "author": "sanyuan0704",
   "main": "dist/index.js",
+  "repository": {
+    "url": "git@github.com:sanyuan0704/vite-plugin-chunk-split.git"
+  },
   "scripts": {
     "build": "tsc",
     "start": "tsc -w",

@@ -118,7 +118,7 @@ export function chunkSplitPlugin(
     }, customSplitting);
   }
 
-  if (strategy === "default") {
+  if (strategy === "default" || strategy === 'single-vendor') {
     manualChunks = wrapCustomSplitConfig(
       (id, { getModuleInfo }): string | undefined => {
         if (id.includes("node_modules") && !isCSSIdentifier(id)) {

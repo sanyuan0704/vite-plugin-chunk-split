@@ -55,7 +55,7 @@ import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
   plugins: [
     // ...
     chunkSplitPlugin({
-      strategy: 'single-vendor',
+      strategy: 'default',
       customSplitting: {
         // `react` and `react-dom` will be bundled together in the `react-vendor` chunk (with their dependencies, such as object-assign)
         'react-vendor': ['react', 'react-dom'],

@@ -9,11 +9,11 @@ Vite 代码拆包插件。支持多种拆包策略，可避免手动操作 manua
 首先安装依赖:
 ```js
 // use npm
-npm i vite-plugin-chunk-split
+npm i vite-plugin-chunk-split -D
 // use yarn
-yarn add vite-plugin-chunk-split
+yarn add vite-plugin-chunk-split -D
 // use pnpm
-pnpm i vite-plugin-chunk-split
+pnpm i vite-plugin-chunk-split -D
 ```
 
 然后你可以在 Vite 配置文件中使用它:

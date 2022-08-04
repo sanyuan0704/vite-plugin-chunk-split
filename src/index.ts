@@ -1,5 +1,5 @@
 import { ManualChunksOption } from "rollup";
-import { Plugin, resolvePackageEntry, resolvePackageData } from "vite";
+import { Plugin, resolvePackageEntry, resolvePackageData, normalizePath } from "vite";
 import assert from "assert";
 import path from "path";
 import { ChunkSplit, CustomSplitting } from "./types";
@@ -147,7 +147,7 @@ export function chunkSplitPlugin(
         const cwd = process.cwd();
         if (!id.includes("node_modules") && !isCSSIdentifier(id)) {
           const extname = path.extname(id);
-          return path.relative(cwd, id).replace(extname, "");
+          return normalizePath(path.relative(cwd, id).replace(extname, ""));
         }
         return;
       },

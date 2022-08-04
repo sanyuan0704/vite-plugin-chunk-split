@@ -8,11 +8,11 @@ A vite plugin for better chunk splitting.
 
 ```js
 // use npm
-npm i vite-plugin-chunk-split
+npm i vite-plugin-chunk-split -D
 // use yarn
-yarn add vite-plugin-chunk-split
+yarn add vite-plugin-chunk-split -D
 // use pnpm
-pnpm i vite-plugin-chunk-split
+pnpm i vite-plugin-chunk-split -D
 ```
 
 Then you can use it in vite.config.ts:

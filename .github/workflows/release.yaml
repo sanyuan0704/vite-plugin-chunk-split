@@ -41,7 +41,6 @@ jobs:
       
       - name: Publish Package
         run: pnpm publish
-
-      - env:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

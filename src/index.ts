@@ -54,6 +54,8 @@ const wrapCustomSplitConfig = (
       depPaths: string[],
       importChain: string[]
     ): boolean | undefined => {
+      // compat windows
+      id = normalizePath(id);
       const key = `${id}-${depPaths.join("|")}`;
 
       // circular dependency
@@ -104,6 +106,7 @@ const wrapCustomSplitConfig = (
     return manualChunks(moduleId, { getModuleIds, getModuleInfo });
   };
 };
+
 export function chunkSplitPlugin(
   splitOptions: ChunkSplit = {
     strategy: "default",

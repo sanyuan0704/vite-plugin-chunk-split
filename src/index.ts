@@ -1,49 +1,38 @@
 import { ManualChunksOption } from "rollup";
-import { Plugin, resolvePackageEntry, resolvePackageData, normalizePath } from "vite";
+import { Plugin } from "vite";
 import assert from "assert";
 import path from "path";
 import { ChunkSplit, CustomSplitting } from "./types";
 import { staticImportedScan } from "./staticImportScan";
 import { isCSSIdentifier } from "./helper";
+import { normalizePath, resolveEntry } from "./utils";
 
 const SPLIT_DEFAULT_MODULES: CustomSplitting = {};
 
-const resolveEntry = (name: string): string =>
-  resolvePackageEntry(
-    name,
-    resolvePackageData(name, process.cwd(), true)!,
-    true,
-    {
-      isBuild: true,
-      isProduction: process.env.NODE_ENV === "production",
-      isRequire: false,
-      root: process.cwd(),
-      preserveSymlinks: false,
-    }
-  )!;
-
 const cache = new Map<string, boolean>();
 
-const wrapCustomSplitConfig = (
+const wrapCustomSplitConfig = async (
   manualChunks: ManualChunksOption,
   customOptions: CustomSplitting
-): ManualChunksOption => {
+): Promise<ManualChunksOption> => {
   assert(typeof manualChunks === "function");
   const groups = Object.keys(customOptions);
   // Create cache ahead of time to decrease the cost of resolve.sync!
   const depsInGroup: Record<string, string[]> = {};
   for (const group of groups) {
     const packageInfo = customOptions[group];
-    depsInGroup[group] = packageInfo
-      .filter((item): boolean => typeof item === "string")
-      .map((item) => {
-        try {
-          return resolveEntry(item as string);
-        } catch (err) {
-          return "";
-        }
-      })
-      .filter((_: string): boolean => _.length > 0);
+    depsInGroup[group] = await Promise.all(
+      packageInfo
+        .filter((item): boolean => typeof item === "string")
+        .map((item) => {
+          try {
+            return resolveEntry(item as string);
+          } catch (err) {
+            return "";
+          }
+        })
+    );
+    depsInGroup[group] = depsInGroup[group].filter((item) => item.length > 0);
   }
   return (
     moduleId,
@@ -107,38 +96,17 @@ const wrapCustomSplitConfig = (
   };
 };
 
-export function chunkSplitPlugin(
-  splitOptions: ChunkSplit = {
-    strategy: "default",
-  }
-): Plugin {
+const generateManualChunks = async (splitOptions: ChunkSplit) => {
   const { strategy = "default", customSplitting = {} } = splitOptions;
-  let manualChunks: ManualChunksOption;
 
   if (strategy === "all-in-one") {
-    manualChunks = wrapCustomSplitConfig(() => {
+    return wrapCustomSplitConfig(() => {
       return null;
     }, customSplitting);
   }
 
-  if (strategy === "default" || strategy === 'single-vendor') {
-    manualChunks = wrapCustomSplitConfig(
-      (id, { getModuleInfo }): string | undefined => {
-        if (id.includes("node_modules") && !isCSSIdentifier(id)) {
-          if (staticImportedScan(id, getModuleInfo, new Map(), [])) {
-            return "vendor";
-          }
-        }
-      },
-      {
-        ...SPLIT_DEFAULT_MODULES,
-        ...customSplitting,
-      }
-    );
-  }
-
   if (strategy === "unbundle") {
-    manualChunks = wrapCustomSplitConfig(
+    return wrapCustomSplitConfig(
       (id, { getModuleInfo }): string | undefined => {
         if (id.includes("node_modules") && !isCSSIdentifier(id)) {
           if (staticImportedScan(id, getModuleInfo, new Map(), [])) {
@@ -161,9 +129,30 @@ export function chunkSplitPlugin(
     );
   }
 
+  return wrapCustomSplitConfig(
+    (id, { getModuleInfo }): string | undefined => {
+      if (id.includes("node_modules") && !isCSSIdentifier(id)) {
+        if (staticImportedScan(id, getModuleInfo, new Map(), [])) {
+          return "vendor";
+        }
+      }
+    },
+    {
+      ...SPLIT_DEFAULT_MODULES,
+      ...customSplitting,
+    }
+  );
+};
+
+export function chunkSplitPlugin(
+  splitOptions: ChunkSplit = {
+    strategy: "default",
+  }
+): Plugin {
   return {
     name: "vite-plugin-chunk-split",
-    config() {
+    async config() {
+      const manualChunks = await generateManualChunks(splitOptions);
       return {
         build: {
           rollupOptions: {

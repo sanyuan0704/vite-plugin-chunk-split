@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-chunk-split",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "A vite plugin for better chunk split",
   "author": "sanyuan0704",
   "main": "dist/index.js",

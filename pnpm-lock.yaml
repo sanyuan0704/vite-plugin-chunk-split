@@ -4,11 +4,17 @@ specifiers:
   '@types/jest': ^27.0.1
   '@types/node': ^17.0.18
   '@types/resolve': ^1.20.1
+  es-module-lexer: ^1.0.3
   esbuild-jest: ^0.5.0
   jest: ^27.5.1
+  magic-string: ^0.26.3
   rollup: ^2.62.0
   typescript: ^4.5.2
   vite: ^2.7.10
+
+dependencies:
+  es-module-lexer: 1.0.3
+  magic-string: 0.26.3
 
 devDependencies:
   '@types/jest': 27.4.0
@@ -1390,6 +1396,10 @@ packages:
     dependencies:
       is-arrayish: 0.2.1
     dev: true
+
+  /es-module-lexer/1.0.3:
+    resolution: {integrity: sha512-iC67eXHToclrlVhQfpRawDiF8D8sQxNxmbqw5oebegOaJkyx/w9C/k57/5e6yJR2zIByRt9OXdqX50DV2t6ZKw==}
+    dev: false
 
   /esbuild-android-arm64/0.14.23:
     resolution: {integrity: sha512-k9sXem++mINrZty1v4FVt6nC5BQCFG4K2geCIUUqHNlTdFnuvcqsY7prcKZLFhqVC1rbcJAr9VSUGFL/vD4vsw==}
@@ -2852,6 +2862,13 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /magic-string/0.26.3:
+    resolution: {integrity: sha512-u1Po0NDyFcwdg2nzHT88wSK0+Rih0N1M+Ph1Sp08k8yvFFU3KR72wryS7e1qMPJypt99WB7fIFVCA92mQrMjrg==}
+    engines: {node: '>=12'}
+    dependencies:
+      sourcemap-codec: 1.4.8
+    dev: false
+
   /make-dir/3.1.0:
     resolution: {integrity: sha1-QV6WcEazp/HRhSd9hKpYIDcmoT8=}
     engines: {node: '>=8'}
@@ -3493,6 +3510,10 @@ packages:
     resolution: {integrity: sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==}
     engines: {node: '>= 8'}
     dev: true
+
+  /sourcemap-codec/1.4.8:
+    resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
+    dev: false
 
   /split-string/3.1.0:
     resolution: {integrity: sha1-fLCd2jqGWFcFxks5pkZgOGguj+I=}

@@ -1,11 +1,12 @@
 {
   "name": "vite-plugin-chunk-split",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A vite plugin for better chunk split",
   "author": "sanyuan0704",
   "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
   "repository": {
-    "url": "git@github.com:sanyuan0704/vite-plugin-chunk-split.git"
+    "url": "git+ssh://git@github.com/sanyuan0704/vite-plugin-chunk-split.git"
   },
   "scripts": {
     "build": "tsc",
@@ -33,5 +34,13 @@
   },
   "peerDependencies": {
     "vite": ">=2.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/sanyuan0704/vite-plugin-chunk-split/issues"
+  },
+  "homepage": "https://github.com/sanyuan0704/vite-plugin-chunk-split#readme",
+  "dependencies": {
+    "es-module-lexer": "^1.0.3",
+    "magic-string": "^0.26.3"
   }
 }

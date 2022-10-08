@@ -17,7 +17,8 @@ const cache = new Map<string, boolean>();
 
 const wrapCustomSplitConfig = async (
   manualChunks: ManualChunksOption,
-  customOptions: CustomSplitting
+  customOptions: CustomSplitting,
+  root?: string
 ): Promise<ManualChunksOption> => {
   assert(typeof manualChunks === "function");
   const groups = Object.keys(customOptions);
@@ -30,7 +31,7 @@ const wrapCustomSplitConfig = async (
         .filter((item): boolean => typeof item === "string")
         .map((item) => {
           try {
-            return resolveEntry(item as string);
+            return resolveEntry(item as string, root);
           } catch (err) {
             return "";
           }
@@ -100,13 +101,20 @@ const wrapCustomSplitConfig = async (
   };
 };
 
-const generateManualChunks = async (splitOptions: ChunkSplit) => {
+const generateManualChunks = async (
+  splitOptions: ChunkSplit,
+  root?: string
+) => {
   const { strategy = "default", customSplitting = {} } = splitOptions;
 
   if (strategy === "all-in-one") {
-    return wrapCustomSplitConfig(() => {
-      return null;
-    }, customSplitting);
+    return wrapCustomSplitConfig(
+      () => {
+        return null;
+      },
+      customSplitting,
+      root
+    );
   }
 
   if (strategy === "unbundle") {
@@ -129,7 +137,8 @@ const generateManualChunks = async (splitOptions: ChunkSplit) => {
       {
         ...SPLIT_DEFAULT_MODULES,
         ...customSplitting,
-      }
+      },
+      root
     );
   }
 
@@ -144,7 +153,8 @@ const generateManualChunks = async (splitOptions: ChunkSplit) => {
     {
       ...SPLIT_DEFAULT_MODULES,
       ...customSplitting,
-    }
+    },
+    root
   );
 };
 
@@ -155,9 +165,9 @@ export function chunkSplitPlugin(
 ): Plugin {
   return {
     name: "vite-plugin-chunk-split",
-    async config() {
+    async config(c) {
       await init;
-      const manualChunks = await generateManualChunks(splitOptions);
+      const manualChunks = await generateManualChunks(splitOptions, c.root);
       return {
         build: {
           rollupOptions: {

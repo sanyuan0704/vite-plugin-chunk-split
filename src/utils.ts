@@ -12,14 +12,17 @@ export function normalizePath(id: string): string {
 }
 export const isWindows = os.platform() === "win32";
 
-export async function resolveEntry(name: string): Promise<string> {
+export async function resolveEntry(
+  name: string,
+  root?: string
+): Promise<string> {
   const { resolvePackageEntry, resolvePackageData } =
     // Vite 3 will expose pure esm package.
     await dynamicImport("vite");
 
   return resolvePackageEntry(
     name,
-    resolvePackageData(name, process.cwd(), true)!,
+    resolvePackageData(name, root || process.cwd(), true)!,
     true,
     {
       isBuild: true,

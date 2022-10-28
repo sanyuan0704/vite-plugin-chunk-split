@@ -18,6 +18,7 @@ export async function resolveEntry(
 ): Promise<string> {
   const { resolvePackageEntry, resolvePackageData } =
     // Vite 3 will expose pure esm package.
+    // Since the api in vite is not stable, we put `vite` in `dependencies` instead of `peerDependencies` and lock the version.
     await dynamicImport("vite");
 
   return resolvePackageEntry(

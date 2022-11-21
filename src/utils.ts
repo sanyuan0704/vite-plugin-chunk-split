@@ -20,17 +20,20 @@ export async function resolveEntry(
     // Vite 3 will expose pure esm package.
     // Since the api in vite is not stable, we put `vite` in `dependencies` instead of `peerDependencies` and lock the version.
     await dynamicImport("vite");
-
-  return resolvePackageEntry(
-    name,
-    resolvePackageData(name, root || process.cwd(), true)!,
-    true,
-    {
-      isBuild: true,
-      isProduction: process.env.NODE_ENV === "production",
-      isRequire: false,
-      root: process.cwd(),
-      preserveSymlinks: false,
-    }
-  )!;
+  try {
+    return resolvePackageEntry(
+      name,
+      resolvePackageData(name, root || process.cwd(), true)!,
+      true,
+      {
+        isBuild: true,
+        isProduction: process.env.NODE_ENV === "production",
+        isRequire: false,
+        root: process.cwd(),
+        preserveSymlinks: false,
+      }
+    )!;
+  } catch (error) {
+    return "";
+  }
 }

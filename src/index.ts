@@ -29,13 +29,7 @@ const wrapCustomSplitConfig = async (
     depsInGroup[group] = await Promise.all(
       packageInfo
         .filter((item): boolean => typeof item === "string")
-        .map((item) => {
-          try {
-            return resolveEntry(item as string, root);
-          } catch (err) {
-            return "";
-          }
-        })
+        .map((item) => resolveEntry(item as string, root))
     );
     depsInGroup[group] = depsInGroup[group].filter((item) => item.length > 0);
   }

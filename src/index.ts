@@ -188,6 +188,7 @@ export function chunkSplitPlugin(
       }
       return {
         code: code,
+        map: chunk.map,
       };
     },
   };

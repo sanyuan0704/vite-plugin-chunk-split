@@ -8,6 +8,7 @@ import { isCSSIdentifier } from "./helper";
 import { normalizePath, resolveEntry } from "./utils";
 import { init, parse } from "es-module-lexer";
 import MagicString from "magic-string";
+import { cwd } from "process";
 
 const SPLIT_DEFAULT_MODULES: CustomSplitting = {
   __commonjsHelpers__: [/commonjsHelpers/],
@@ -153,6 +154,7 @@ export function chunkSplitPlugin(
   return {
     name: "vite-plugin-chunk-split",
     async config(c) {
+      console.log(c);
       await init;
       const manualChunks = await generateManualChunks(splitOptions, c.root);
       return {

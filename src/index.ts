@@ -36,12 +36,12 @@ const wrapCustomSplitConfig = async (
   return (
     moduleId,
     { getModuleIds, getModuleInfo }
-  ): string | null | void => {
+  ): string | null | undefined => {
     const isDepInclude = (
       id: string,
       depPaths: string[],
       importChain: string[]
-    ): boolean | undefined => {
+    ): boolean | null | undefined => {
       // compat windows
       id = normalizePath(id);
       const key = `${id}-${depPaths.join("|")}`;
@@ -102,16 +102,12 @@ const generateManualChunks = async (
   const { strategy = "default", customSplitting = {} } = splitOptions;
 
   if (strategy === "all-in-one") {
-    return wrapCustomSplitConfig(
-      () => null,
-      customSplitting,
-      root
-    );
+    return wrapCustomSplitConfig(() => null, customSplitting, root);
   }
 
   if (strategy === "unbundle") {
     return wrapCustomSplitConfig(
-      (id, { getModuleInfo }): string | void => {
+      (id, { getModuleInfo }): string | undefined => {
         if (id.includes("node_modules") && !isCSSIdentifier(id)) {
           if (staticImportedScan(id, getModuleInfo, new Map(), [])) {
             return "vendor";

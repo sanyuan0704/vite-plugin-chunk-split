@@ -153,7 +153,6 @@ export function chunkSplitPlugin(
   return {
     name: "vite-plugin-chunk-split",
     async config(c) {
-      console.log(c);
       await init;
       const manualChunks = await generateManualChunks(splitOptions, c.root);
       return {

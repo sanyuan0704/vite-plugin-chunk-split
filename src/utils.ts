@@ -1,6 +1,8 @@
 import os from "os";
 import path from "path";
-import { resolvePackageEntry, resolvePackageData, type InternalResolveOptions } from 'vite'
+import type { InternalResolveOptions } from 'vite'
+
+const dynamicImport = new Function("m", "return import(m)");
 
 export function slash(p: string): string {
   return p.replace(/\\/g, "/");
@@ -15,20 +17,20 @@ export async function resolveEntry(
   name: string,
   root?: string
 ): Promise<string> {
-  try {
-    return resolvePackageEntry(
-      name,
-      resolvePackageData(name, root || process.cwd(), true)!,
-      true,
-      {
-        isBuild: true,
-        isProduction: process.env.NODE_ENV === "production",
-        isRequire: false,
-        root: process.cwd(),
-        preserveSymlinks: false,
-      } as InternalResolveOptions
-    )!;
-  } catch (error) {
-    return "";
-  }
+  const { resolvePackageEntry, resolvePackageData } = await dynamicImport('vite');
+  return resolvePackageEntry(
+    name,
+    resolvePackageData(name, root || process.cwd(), true)!,
+    true,
+    {
+      isBuild: true,
+      isProduction: process.env.NODE_ENV === "production",
+      isRequire: false,
+      root: process.cwd(),
+      preserveSymlinks: false,
+      mainFields: [],
+      conditions: [],
+      // extensions: []
+    } as unknown as InternalResolveOptions
+  )!;
 }

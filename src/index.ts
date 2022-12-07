@@ -8,7 +8,6 @@ import { isCSSIdentifier } from "./helper";
 import { normalizePath, resolveEntry } from "./utils";
 import { init, parse } from "es-module-lexer";
 import MagicString from "magic-string";
-import { cwd } from "process";
 
 const SPLIT_DEFAULT_MODULES: CustomSplitting = {
   __commonjsHelpers__: [/commonjsHelpers/],

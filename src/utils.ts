@@ -1,7 +1,6 @@
 import os from "os";
 import path from "path";
-
-const dynamicImport = new Function("m", "return import(m)");
+import { resolvePackageEntry, resolvePackageData, type InternalResolveOptions } from 'vite'
 
 export function slash(p: string): string {
   return p.replace(/\\/g, "/");
@@ -16,10 +15,6 @@ export async function resolveEntry(
   name: string,
   root?: string
 ): Promise<string> {
-  const { resolvePackageEntry, resolvePackageData } =
-    // Vite 3 will expose pure esm package.
-    // Since the api in vite is not stable, we put `vite` in `dependencies` instead of `peerDependencies` and lock the version.
-    await dynamicImport("vite");
   try {
     return resolvePackageEntry(
       name,
@@ -31,7 +26,7 @@ export async function resolveEntry(
         isRequire: false,
         root: process.cwd(),
         preserveSymlinks: false,
-      }
+      } as InternalResolveOptions
     )!;
   } catch (error) {
     return "";

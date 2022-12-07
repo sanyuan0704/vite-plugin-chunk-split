@@ -29,7 +29,8 @@
     "esbuild-jest": "^0.5.0",
     "jest": "^27.5.1",
     "rollup": "^2.62.0",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "vite": "^3.1.0"
   },
   "bugs": {
     "url": "https://github.com/sanyuan0704/vite-plugin-chunk-split/issues"
@@ -37,7 +38,9 @@
   "homepage": "https://github.com/sanyuan0704/vite-plugin-chunk-split#readme",
   "dependencies": {
     "es-module-lexer": "^1.0.3",
-    "magic-string": "^0.26.3",
-    "vite": "3.1.0"
+    "magic-string": "^0.26.3"
+  },
+  "peerDependencies": {
+    "vite": "^3.1.0"
   }
 }

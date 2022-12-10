@@ -56,6 +56,16 @@ import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
     // ...
     chunkSplitPlugin({
       strategy: 'single-vendor',
+      customChunk: (args)=>{
+        // files into pages directory is export in single files
+        let { file, id, moduleId, root } = args;
+        if(file.startsWith('src/pages/')){
+          file = file.substring(4);
+          file = file.replace(/\.[^.$]+$/, '');
+          return file;
+        }
+        return null;
+      }
       customSplitting: {
         // `react` and `react-dom` will be bundled together in the `react-vendor` chunk (with their dependencies, such as object-assign)
         'react-vendor': ['react', 'react-dom'],

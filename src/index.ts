@@ -2,7 +2,7 @@ import { ManualChunksOption } from "rollup";
 import { Plugin } from "vite";
 import assert from "assert";
 import path from "path";
-import { ChunkSplit, CustomSplitting } from "./types";
+import { ChunkSplit, CustomChunk, CustomSplitting } from "./types";
 import { staticImportedScan } from "./staticImportScan";
 import { isCSSIdentifier } from "./helper";
 import { normalizePath, resolveEntry } from "./utils";
@@ -18,7 +18,8 @@ const cache = new Map<string, boolean>();
 const wrapCustomSplitConfig = async (
   manualChunks: ManualChunksOption,
   customOptions: CustomSplitting,
-  root?: string
+  customChunk: CustomChunk,
+  root: string
 ): Promise<ManualChunksOption> => {
   assert(typeof manualChunks === "function");
   const groups = Object.keys(customOptions);
@@ -73,6 +74,18 @@ const wrapCustomSplitConfig = async (
       cache.set(key, isInclude);
       return isInclude;
     };
+
+    const id = normalizePath(moduleId);    
+    const chunk = customChunk({
+      id,
+      moduleId,
+      root,
+      file: normalizePath(path.relative(root, id)),
+    });
+    if(chunk){
+      return chunk;
+    }
+
     for (const group of groups) {
       const deps = depsInGroup[group];
       const packageInfo = customOptions[group];
@@ -97,12 +110,12 @@ const wrapCustomSplitConfig = async (
 
 const generateManualChunks = async (
   splitOptions: ChunkSplit,
-  root?: string
+  root: string
 ) => {
-  const { strategy = "default", customSplitting = {} } = splitOptions;
+  const { strategy = "default", customSplitting = {}, customChunk = () => null } = splitOptions;
 
   if (strategy === "all-in-one") {
-    return wrapCustomSplitConfig(() => null, customSplitting, root);
+    return wrapCustomSplitConfig(() => null, customSplitting, customChunk, root);
   }
 
   if (strategy === "unbundle") {
@@ -125,6 +138,7 @@ const generateManualChunks = async (
         ...SPLIT_DEFAULT_MODULES,
         ...customSplitting,
       },
+      customChunk,
       root
     );
   }
@@ -141,6 +155,7 @@ const generateManualChunks = async (
       ...SPLIT_DEFAULT_MODULES,
       ...customSplitting,
     },
+    customChunk,
     root
   );
 };
@@ -154,7 +169,8 @@ export function chunkSplitPlugin(
     name: "vite-plugin-chunk-split",
     async config(c) {
       await init;
-      const manualChunks = await generateManualChunks(splitOptions, c.root);
+      const root = normalizePath( c.root || process.cwd() );
+      const manualChunks = await generateManualChunks(splitOptions, root);
       return {
         build: {
           rollupOptions: {

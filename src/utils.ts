@@ -9,24 +9,28 @@ export function slash(p: string): string {
 }
 
 export function normalizePath(id: string): string {
-  return path.posix.normalize(isWindows ? slash(id) : id);
+  let key = path.posix.normalize(isWindows ? slash(id) : id);
+  if(key.charCodeAt(0) === 0){
+    key = key.substring(1);
+  }
+  return key;
 }
 export const isWindows = os.platform() === "win32";
 
 export async function resolveEntry(
   name: string,
-  root?: string
+  root: string
 ): Promise<string> {
   const { resolvePackageEntry, resolvePackageData } = await dynamicImport('vite');
   return resolvePackageEntry(
     name,
-    resolvePackageData(name, root || process.cwd(), true)!,
+    resolvePackageData(name, root, true)!,
     true,
     {
       isBuild: true,
       isProduction: process.env.NODE_ENV === "production",
       isRequire: false,
-      root: process.cwd(),
+      root,
       preserveSymlinks: false,
       mainFields: [],
       conditions: [],

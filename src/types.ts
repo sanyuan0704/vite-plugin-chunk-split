@@ -14,4 +14,5 @@ export interface ChunkSplit {
   strategy?: Strategy;
   customSplitting?: CustomSplitting;
   customChunk?: CustomChunk;
+  useEntryName?: boolean;
 }

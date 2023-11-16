@@ -1,9 +1,7 @@
+import { resolve } from "import-meta-resolve";
 import os from "os";
 import path from "path";
-import type { InternalResolveOptions } from 'vite'
-
-const dynamicImport = new Function("m", "return import(m)");
-
+// const dynamicImport = new Function("m", "return import(m)");
 export function slash(p: string): string {
   return p.replace(/\\/g, "/");
 }
@@ -17,24 +15,19 @@ export function normalizePath(id: string): string {
 }
 export const isWindows = os.platform() === "win32";
 
+
+// const basedir = process.cwd();
+
 export async function resolveEntry(
   name: string,
   root: string
 ): Promise<string> {
-  const { resolvePackageEntry, resolvePackageData } = await dynamicImport('vite');
-  return resolvePackageEntry(
-    name,
-    resolvePackageData(name, root, true)!,
-    true,
-    {
-      isBuild: true,
-      isProduction: process.env.NODE_ENV === "production",
-      isRequire: false,
-      root,
-      preserveSymlinks: false,
-      mainFields: [],
-      conditions: [],
-      // extensions: []
-    } as unknown as InternalResolveOptions
-  )!;
+  // const { resolvePackageEntry, resolvePackageData } = await dynamicImport('vite');
+  try {
+    import.meta.url
+  } catch (e) {
+    // CJS
+    return require.resolve(name, { paths: [root] });
+  }
+  return resolve(name, 'file://' + root).replace('file://', '')
 }

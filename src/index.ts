@@ -1,13 +1,13 @@
-import { ManualChunksOption } from "rollup";
-import { Plugin } from "vite";
 import assert from "assert";
-import path from "path";
-import { ChunkSplit, CustomChunk, CustomSplitting } from "./types";
-import { staticImportedScan } from "./staticImportScan";
-import { isCSSIdentifier } from "./helper";
-import { normalizePath, resolveEntry } from "./utils";
 import { init, parse } from "es-module-lexer";
 import MagicString from "magic-string";
+import path from "path";
+import { ManualChunksOption, NullValue } from "rollup";
+import { Plugin } from "vite";
+import { isCSSIdentifier } from "./helper";
+import { staticImportedScan } from "./staticImportScan";
+import { ChunkSplit, CustomChunk, CustomSplitting } from "./types";
+import { normalizePath, resolveEntry } from "./utils";
 
 const SPLIT_DEFAULT_MODULES: CustomSplitting = {
   __commonjsHelpers__: [/commonjsHelpers/],
@@ -37,7 +37,7 @@ const wrapCustomSplitConfig = async (
   return (
     moduleId,
     { getModuleIds, getModuleInfo }
-  ): string | null | undefined => {
+  ): string | NullValue => {
     const isDepInclude = (
       id: string,
       depPaths: string[],
@@ -112,7 +112,7 @@ const generateManualChunks = async (
   splitOptions: ChunkSplit,
   root: string
 ) => {
-  const { strategy = "default", customSplitting = {}, customChunk = () => null } = splitOptions;
+  const { strategy = "default", customSplitting = {}, customChunk = () => null, useEntryName = true} = splitOptions;
 
   if (strategy === "all-in-one") {
     return wrapCustomSplitConfig(() => null, customSplitting, customChunk, root);
@@ -147,7 +147,7 @@ const generateManualChunks = async (
     (id, { getModuleInfo }): string | undefined => {
       if (id.includes("node_modules") && !isCSSIdentifier(id)) {
         if (staticImportedScan(id, getModuleInfo, new Map(), [])) {
-          return "vendor";
+          return useEntryName ? undefined : "vendor";
         }
       }
     },
@@ -163,6 +163,7 @@ const generateManualChunks = async (
 export function chunkSplitPlugin(
   splitOptions: ChunkSplit = {
     strategy: "default",
+    useEntryName: true,
   }
 ): Plugin {
   return {
@@ -197,7 +198,7 @@ export function chunkSplitPlugin(
       }
       return {
         code: code,
-        map: chunk.map || s.generateMap({ hires: true }),
+        map: s.generateMap({ hires: true }),
       };
     },
   };

@@ -29,5 +29,6 @@ export async function resolveEntry(
     // CJS
     return require.resolve(name, { paths: [root] });
   }
-  return resolve(name, 'file://' + root).replace('file://', '')
+  const fullPath = root.endsWith("/") ? root : root + "/";
+  return resolve(name, "file://" + fullPath).replace("file://", "");
 }

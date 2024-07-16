@@ -1,4 +1,4 @@
-import { resolve } from "import-meta-resolve";
+import { resolve } from "@dual-bundle/import-meta-resolve";
 import os from "os";
 import path from "path";
 // const dynamicImport = new Function("m", "return import(m)");

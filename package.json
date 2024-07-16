@@ -44,7 +44,7 @@
   "homepage": "https://github.com/sanyuan0704/vite-plugin-chunk-split#readme",
   "dependencies": {
     "es-module-lexer": "^1.4.1",
-    "import-meta-resolve": "^4.0.0",
+    "@dual-bundle/import-meta-resolve": "^4.0.0",
     "magic-string": "^0.30.5"
   },
   "peerDependencies": {

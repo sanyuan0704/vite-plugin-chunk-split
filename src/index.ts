@@ -75,7 +75,7 @@ const wrapCustomSplitConfig = async (
       return isInclude;
     };
 
-    const id = normalizePath(moduleId);    
+    const id = normalizePath(moduleId);
     const chunk = customChunk({
       id,
       moduleId,
@@ -131,7 +131,11 @@ const generateManualChunks = async (
         const cwd = process.cwd();
         if (!id.includes("node_modules") && !isCSSIdentifier(id)) {
           const extname = path.extname(id);
-          return normalizePath(path.relative(cwd, id).replace(extname, ""));
+          const rawPath = normalizePath(
+            path.relative(cwd, id).replace(extname, "")
+          );
+          const res = rawPath.replace(/^([./]+)/, "");
+          return res;
         }
       },
       {

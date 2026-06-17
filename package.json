@@ -16,7 +16,7 @@
     "dist"
   ],
   "repository": {
-    "url": "git+ssh://git@github.com/sanyuan0704/vite-plugin-chunk-split.git"
+    "url": "git+https://github.com/sanyuan0704/vite-plugin-chunk-split.git"
   },
   "scripts": {
     "dev": "unbuild --stub",
